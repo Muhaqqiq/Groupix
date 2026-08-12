@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Response - Groupix</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --primary-color: #1e3a8a;
+      --primary-hover: #1e40af;
+      --accent-color: #d97706;
+      --border-color: #e2e8f0;
+      --shadow: 0 4px 15px -2px rgba(15, 23, 42, 0.05);
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #0b1329;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary-color: #2563eb;
+      --primary-hover: #3b82f6;
+      --accent-color: #fbbf24;
+      --border-color: #334155;
+      --shadow: 0 4px 15px -2px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .form-container {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 32px 24px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+    }
+
+    .brand-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+
+    .countdown-box {
+      background: rgba(217, 119, 6, 0.1);
+      border: 1px solid var(--accent-color);
+      color: var(--accent-color);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-title {
+      font-size: 1.5rem;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .form-description {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .input-group {
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .input-group label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .input-group label .required-star {
+      color: #ef4444;
+    }
+
+    .input-group input[type="text"],
+    .input-group input[type="email"],
+    .input-group input[type="tel"],
+    .input-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background-color: var(--card-bg);
+      color: var(--text-main);
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .input-group input:focus,
+    .input-group textarea:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
+    }
+
+    .btn-submit, .btn-secondary {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      border: none;
+    }
+
+    .btn-submit {
+      background-color: var(--primary-color);
+      color: #ffffff;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--bg-color);
+    }
+
+    .message-state {
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    .message-state i {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+    .message-state.error i { color: #ef4444; }
+    .message-state.success i { color: #10b981; }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <div class="brand-header">
+      <i class="fa-solid fa-layer-group"></i> Groupix
+    </div>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="message-state">
+      <i class="fa-solid fa-spinner fa-spin" style="color: var(--primary-color);"></i>
+      <p>Loading form...</p>
+    </div>
+
+    <!-- Error / Locked State -->
+    <div id="errorState" class="message-state error hidden">
+      <i class="fa-solid fa-circle-xmark"></i>
+      <h2 id="errorMessageTitle">Form Unavailable</h2>
+      <p id="errorMessageText" style="color: var(--text-muted); margin-top: 8px;"></p>
+    </div>
+
+    <!-- Success State -->
+    <div id="successState" class="message-state success hidden">
+      <i class="fa-solid fa-circle-check"></i>
+      <h2>Response Submitted!</h2>
+      <p style="color: var(--text-muted); margin-top: 8px; margin-bottom: 16px;">Your submission has been recorded successfully.</p>
+      <button id="btnSubmitAnother" class="btn-secondary">
+        <i class="fa-solid fa-rotate-right"></i> Submit Another Response
+      </button>
+    </div>
+
+    <!-- Dynamic Form Content -->
+    <form id="publicForm" class="hidden">
+      <div id="countdownBox" class="countdown-box hidden">
+        <i class="fa-solid fa-clock"></i> <span id="countdownText">Calculating deadline...</span>
+      </div>
+
+      <h1 id="displayTitle" class="form-title"></h1>
+      <p id="displayDescription" class="form-description"></p>
+
+      <div id="dynamicFieldsContainer"></div>
+
+      <button type="submit" id="submitBtn" class="btn-submit">
+        <i class="fa-solid fa-paper-plane"></i> Submit Response
+      </button>
+    </form>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+      getFirestore, 
+      doc, 
+      getDoc, 
+      collection, 
+      addDoc, 
+      getDocs, 
+      serverTimestamp 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDWz4W3OfUjXwlkO6dkPud5m4M0GZ1I4xs",
+      authDomain: "groupix-af7e2.firebaseapp.com",
+      projectId: "groupix-af7e2",
+      storageBucket: "groupix-af7e2.firebasestorage.app",
+      messagingSenderId: "246822951290",
+      appId: "1:246822951290:web:14c1a8047138dc34cc5ec3",
+      measurementId: "G-RMTZ2BNKVJ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const loadingState = document.getElementById('loadingState');
+    const errorState = document.getElementById('errorState');
+    const successState = document.getElementById('successState');
+    const publicForm = document.getElementById('publicForm');
+    const dynamicFieldsContainer = document.getElementById('dynamicFieldsContainer');
+    const countdownBox = document.getElementById('countdownBox');
+    const countdownText = document.getElementById('countdownText');
+    const submitBtn = document.getElementById('submitBtn');
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const formId = urlParams.get('id');
+
+    let formData = null;
+    let timerInterval = null;
+
+    function resetSubmitButton() {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Response';
+    }
+
+    async function loadForm() {
+      if (!formId) {
+        showError("Invalid Link", "No valid form ID was found in the link address.");
+        return;
+      }
+
+      try {
+        const formDoc = await getDoc(doc(db, "forms", formId));
+        if (!formDoc.exists()) {
+          showError("Form Not Found", "This form does not exist or has been removed.");
+          return;
+        }
+
+        formData = formDoc.data();
+
+        // 1. Check Status
+        if (formData.status !== 'active') {
+          showError("Form Closed", "This form is currently locked by the administrator.");
+          return;
+        }
+
+        // 2. Check Deadline
+        if (formData.deadline) {
+          const deadlineMs = formData.deadline.toDate ? formData.deadline.toDate().getTime() : new Date(formData.deadline).getTime();
+          if (Date.now() >= deadlineMs) {
+            showError("Deadline Passed", "Submissions for this form are officially closed.");
+            return;
+          }
+          startCountdown(deadlineMs);
+        }
+
+        // 3. Check Response Limits
+        if (formData.responseLimit) {
+          const respSnap = await getDocs(collection(db, "forms", formId, "responses"));
+          if (respSnap.size >= parseInt(formData.responseLimit, 10)) {
+            showError("Limit Reached", "The maximum number of submissions for this form has been reached.");
+            return;
+          }
+        }
+
+        renderFormFields(formData);
+
+      } catch (err) {
+        showError("Error Loading Form", err.message);
+      }
+    }
+
+    function startCountdown(deadlineMs) {
+      if (timerInterval) clearInterval(timerInterval);
+      countdownBox.classList.remove('hidden');
+      
+      function updateTimer() {
+        const now = Date.now();
+        const diff = deadlineMs - now;
+
+        if (diff <= 0) {
+          clearInterval(timerInterval);
+          showError("Deadline Passed", "Submissions for this form have closed.");
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+        countdownText.innerText = `Time Remaining: ${days > 0 ? days + 'd ' : ''}${hours}h ${mins}m ${secs}s`;
+      }
+
+      updateTimer();
+      timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    function renderFormFields(data) {
+      document.getElementById('displayTitle').innerText = data.title || "Untitled Form";
+      document.getElementById('displayDescription').innerText = data.description || "";
+
+      dynamicFieldsContainer.innerHTML = "";
+
+      // Default Fields
+      if (data.defaultFields && data.defaultFields.length > 0) {
+        data.defaultFields.forEach(fieldKey => {
+          const fieldGroup = document.createElement('div');
+          fieldGroup.className = 'input-group';
+          
+          let labelText = fieldKey.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+          let inputType = 'text';
+
+          if (fieldKey.toLowerCase().includes('email')) inputType = 'email';
+          if (fieldKey.toLowerCase().includes('phone')) inputType = 'tel';
+
+          fieldGroup.innerHTML = `
+            <label for="default_${fieldKey}">${labelText} <span class="required-star">*</span></label>
+            <input type="${inputType}" id="default_${fieldKey}" data-key="${fieldKey}" data-type="default" required>
+          `;
+          dynamicFieldsContainer.appendChild(fieldGroup);
+        });
+      }
+
+      // Custom Fields
+      if (data.customFields && data.customFields.length > 0) {
+        data.customFields.forEach((customField, index) => {
+          const fieldGroup = document.createElement('div');
+          fieldGroup.className = 'input-group';
+
+          fieldGroup.innerHTML = `
+            <label for="custom_${index}">
+              ${customField.name} ${customField.isRequired ? '<span class="required-star">*</span>' : ''}
+            </label>
+            <input type="text" id="custom_${index}" data-key="${customField.name}" data-type="custom" ${customField.isRequired ? 'required' : ''}>
+          `;
+          dynamicFieldsContainer.appendChild(fieldGroup);
+        });
+      }
+
+      resetSubmitButton();
+      loadingState.classList.add('hidden');
+      publicForm.classList.remove('hidden');
+    }
+
+    function showError(title, message) {
+      if (timerInterval) clearInterval(timerInterval);
+      loadingState.classList.add('hidden');
+      publicForm.classList.add('hidden');
+      document.getElementById('errorMessageTitle').innerText = title;
+      document.getElementById('errorMessageText').innerText = message;
+      errorState.classList.remove('hidden');
+    }
+
+    // Submission Handler & Duplicate Checker
+    publicForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+
+      const defaultResponses = {};
+      const customResponses = {};
+
+      // Gather input values
+      const defaultInputs = dynamicFieldsContainer.querySelectorAll('input[data-type="default"]');
+      defaultInputs.forEach(input => {
+        defaultResponses[input.getAttribute('data-key')] = input.value.trim();
+      });
+
+      const customInputs = dynamicFieldsContainer.querySelectorAll('input[data-type="custom"]');
+      customInputs.forEach(input => {
+        customResponses[input.getAttribute('data-key')] = input.value.trim();
+      });
+
+      try {
+        // Fetch existing entries to verify limit & unique values
+        const respSnap = await getDocs(collection(db, "forms", formId, "responses"));
+        
+        if (formData.responseLimit && respSnap.size >= parseInt(formData.responseLimit, 10)) {
+          showError("Limit Reached", "The maximum number of submissions for this form has been reached.");
+          return;
+        }
+
+        // Check duplicates for Matric Number or Email across existing entries
+        let duplicateFound = null;
+        respSnap.forEach(docSnap => {
+          const resData = docSnap.data();
+          const defRes = resData.defaultResponses || {};
+
+          for (const key in defaultResponses) {
+            const isUniqueTarget = key.toLowerCase().includes('matric') || key.toLowerCase().includes('email');
+            if (isUniqueTarget && defRes[key] && defRes[key].toLowerCase() === defaultResponses[key].toLowerCase()) {
+              duplicateFound = `${key.replace(/([A-Z])/g, ' $1')} ("${defaultResponses[key]}") has already been submitted.`;
+              break;
+            }
+          }
+        });
+
+        if (duplicateFound) {
+          alert(`Duplicate Entry Error:\n${duplicateFound}`);
+          resetSubmitButton();
+          return;
+        }
+
+        // Write submission to Firestore
+        await addDoc(collection(db, "forms", formId, "responses"), {
+          submittedAt: serverTimestamp(),
+          defaultResponses,
+          customResponses
+        });
+
+        publicForm.classList.add('hidden');
+        successState.classList.remove('hidden');
+
+      } catch (err) {
+        alert("Failed to submit response: " + err.message);
+        resetSubmitButton();
+      }
+    });
+
+    // Reset Form for New Submission
+    document.getElementById('btnSubmitAnother').addEventListener('click', () => {
+      publicForm.reset();
+      resetSubmitButton();
+      successState.classList.add('hidden');
+      loadForm();
+    });
+
+    loadForm();
+  </script>
+</body>
+</html>

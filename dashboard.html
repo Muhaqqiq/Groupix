@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Groupix - Admin Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- MOBILE HEADER / NAVIGATION BAR -->
+  <header class="mobile-header">
+    <div class="brand">
+      <i class="fa-solid fa-layer-group brand-icon"></i>
+      <h2>Groupix</h2>
+    </div>
+    <div class="header-actions">
+      <button id="themeToggleBtnMobile" class="icon-btn" aria-label="Toggle Theme">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+      <button id="hamburgerBtn" class="icon-btn" aria-label="Toggle Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- SIDEBAR NAVIGATION -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <i class="fa-solid fa-layer-group brand-icon"></i>
+      <h2>Groupix</h2>
+    </div>
+
+    <nav class="nav-menu">
+      <a href="#" class="nav-item active" data-target="dashboardView">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="#" class="nav-item" data-target="createFormView">
+        <i class="fa-solid fa-plus-circle"></i>
+        <span>Create Form</span>
+      </a>
+      <a href="#" class="nav-item" data-target="formsView">
+        <i class="fa-solid fa-folder-open"></i>
+        <span>Forms</span>
+      </a>
+      <a href="#" class="nav-item" data-target="responsesView">
+        <i class="fa-solid fa-users-line"></i>
+        <span>Responses</span>
+      </a>
+      <a href="#" class="nav-item" data-target="settingsView">
+        <i class="fa-solid fa-gear"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button id="themeToggleBtnDesktop" class="theme-toggle-sidebar">
+        <i class="fa-solid fa-moon" id="themeIconDesktop"></i>
+        <span>Dark Mode</span>
+      </button>
+      <button id="logoutBtn" class="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- OVERLAY FOR MOBILE SIDEBAR -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="main-content">
+
+    <!-- TOP BAR (DESKTOP) -->
+    <div class="top-bar">
+      <div class="welcome-text">
+        <h1 id="adminGreeting">Hello Admin</h1>
+        <p>Welcome to your Groupix management dashboard.</p>
+      </div>
+
+      <!-- CLICKABLE ADMIN PROFILE BADGE -->
+      <div class="admin-profile-badge clickable-profile" id="clickableAdminBadge" title="Click to go to Account Settings">
+        <div class="avatar" id="adminAvatar">A</div>
+        <div class="profile-info">
+          <span class="admin-name" id="adminNameDisplay">Hello Admin</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 1: DASHBOARD OVERVIEW -->
+    <section id="dashboardView" class="view-section">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon icon-blue"><i class="fa-solid fa-file-lines"></i></div>
+          <div class="stat-details">
+            <h3>Total Forms</h3>
+            <p id="totalFormsCount">0</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon icon-green"><i class="fa-solid fa-users"></i></div>
+          <div class="stat-details">
+            <h3>Total Responses</h3>
+            <p id="totalResponsesCount">0</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon icon-gold"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="stat-details">
+            <h3>Active Forms</h3>
+            <p id="activeFormsCount">0</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-actions">
+        <div class="section-header">
+          <h2>Recently Created Forms</h2>
+          <button class="btn-primary-sm" id="quickCreateBtn">
+            <i class="fa-solid fa-plus"></i> Create Form
+          </button>
+        </div>
+
+        <div class="forms-container" id="recentFormsList">
+          <div class="empty-state">
+            <i class="fa-solid fa-folder-plus"></i>
+            <p>No forms created yet. Click "Create Form" to get started.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: CREATE FORM -->
+    <section id="createFormView" class="view-section hidden">
+      <div class="form-builder-card">
+        <div class="builder-header">
+          <h2><i class="fa-solid fa-square-plus"></i> Create New Form</h2>
+          <p>Configure form details, select fields, set deadlines, and response limits.</p>
+        </div>
+
+        <form id="createForm">
+          <div class="form-section">
+            <h3>1. Form Information</h3>
+            <div class="input-group">
+              <label for="formTitle">Form Title / Name *</label>
+              <input type="text" id="formTitle" placeholder="e.g., CSC 301 Attendance List" required>
+            </div>
+
+            <div class="input-group">
+              <label for="formDescription">Description *</label>
+              <textarea id="formDescription" rows="3" placeholder="Provide instructions for students..." required></textarea>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>2. Select Form Fields</h3>
+            <p class="section-subtext">Check the fields you want students to submit:</p>
+            
+            <div class="checkbox-grid">
+              <label class="custom-checkbox">
+                <input type="checkbox" name="defaultFields" value="matricNumber">
+                <span class="checkmark"></span>
+                Matriculation Number
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="defaultFields" value="fullName">
+                <span class="checkmark"></span>
+                Full Name
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="defaultFields" value="phone">
+                <span class="checkmark"></span>
+                Phone Number
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="defaultFields" value="email">
+                <span class="checkmark"></span>
+                Email Address
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="defaultFields" value="department">
+                <span class="checkmark"></span>
+                Department
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="defaultFields" value="level">
+                <span class="checkmark"></span>
+                Level
+              </label>
+            </div>
+
+            <div class="custom-fields-wrapper">
+              <div class="custom-fields-header">
+                <h4>Custom Fields (Others)</h4>
+                <button type="button" id="addCustomFieldBtn" class="btn-secondary-sm">
+                  <i class="fa-solid fa-plus"></i> Add Custom Field
+                </button>
+              </div>
+              <div id="customFieldsList" class="custom-fields-list"></div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>3. Restrictions & Controls</h3>
+            <div class="form-row">
+              <div class="input-group">
+                <label for="formDeadline">Deadline Date & Time *</label>
+                <input type="datetime-local" id="formDeadline" required>
+              </div>
+
+              <div class="input-group">
+                <label for="responseLimit">Maximum Responses (Limit)</label>
+                <input type="number" id="responseLimit" min="1" placeholder="e.g. 50 (Leave blank for unlimited)">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary" id="saveFormBtn">
+              <i class="fa-solid fa-paper-plane"></i> Publish Form
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- VIEW 3: FORMS MANAGEMENT -->
+    <section id="formsView" class="view-section hidden">
+      <div class="view-header">
+        <div>
+          <h2><i class="fa-solid fa-folder-open"></i> All Created Forms</h2>
+          <p>Manage active forms, share links, edit deadlines, or close submissions.</p>
+        </div>
+        <button class="btn-primary-sm" id="createFormNavBtn">
+          <i class="fa-solid fa-plus"></i> New Form
+        </button>
+      </div>
+
+      <div id="allFormsGrid" class="forms-grid">
+        <div class="empty-state">
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          <p>Loading your forms...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: RESPONSES MANAGEMENT -->
+    <section id="responsesView" class="view-section hidden">
+      
+      <!-- PRINT ONLY TOP HEADER (Visible only on print) -->
+      <div class="print-only-header">
+        <h1 id="printFormTitle">Form Title</h1>
+        <p id="printFormDesc">Form Description</p>
+      </div>
+
+      <!-- CENTERED SINGLE WATERMARK (Visible only on print) -->
+      <div class="print-watermark">
+        <i class="fa-solid fa-layer-group"></i>
+        <span>GROUPIX</span>
+      </div>
+
+     <!-- TOP-RIGHT PRINT BRAND HEADER -->
+<div class="print-brand-watermark">
+  <i class="fa-solid fa-layer-group brand-icon"></i>
+  <span class="brand-name">Groupix</span>
+</div>
+
+
+      <div class="view-header no-print">
+        <div>
+          <h2><i class="fa-solid fa-users-line"></i> Student Responses</h2>
+          <p>Manage, sort, manually edit, and print form submission lists.</p>
+        </div>
+      </div>
+
+      <!-- CONTROLS BAR -->
+      <div class="responses-toolbar no-print">
+        <!-- Form Selector -->
+        <div style="flex: 1.5; min-width: 220px;">
+          <select id="responseFormSelect" class="form-control" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main);">
+            <option value="">-- Select Form --</option>
+          </select>
+        </div>
+
+        <!-- Search Input -->
+        <div style="flex: 1; min-width: 180px;">
+          <input type="text" id="responseSearchInput" placeholder="Search student info..." disabled style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main);">
+        </div>
+
+        <!-- Sort Selector -->
+        <div style="min-width: 160px;">
+          <select id="responseSortSelect" disabled style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main);">
+            <option value="oldestFirst">Sorted: 1 to End (Oldest)</option>
+            <option value="newestFirst">Sorted: 1 to End (Newest)</option>
+            <option value="nameAsc">Sorted: Name (A-Z)</option>
+          </select>
+        </div>
+
+        <!-- Date Print Toggle Checkbox -->
+        <label class="custom-checkbox no-print" style="font-size: 0.85rem; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+          <input type="checkbox" id="includeDateInPrint" checked>
+          Include Submission Date on Print
+        </label>
+
+        <!-- Action Buttons -->
+        <button id="btnAddStudentResponse" class="btn-primary-sm" disabled>
+          <i class="fa-solid fa-user-plus"></i> Add Student
+        </button>
+        <button id="btnPrintResponses" class="btn-secondary-sm" disabled>
+          <i class="fa-solid fa-print"></i> Print / PDF
+        </button>
+      </div>
+
+      <!-- STATS CARD -->
+      <div id="responsesStatsCard" class="responses-stats-card hidden no-print">
+        <div style="display: flex; gap: 32px; flex-wrap: wrap;">
+          <div>
+            <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Total Responses</span>
+            <h3 id="respStatTotal" style="font-size: 1.4rem; color: var(--primary-color); margin-top: 2px;">0</h3>
+          </div>
+          <div>
+            <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Active Form</span>
+            <h3 id="respStatFormName" style="font-size: 0.95rem; color: var(--text-main); margin-top: 6px;">--</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESPONSES TABLE CONTAINER -->
+      <div class="responses-table-wrapper">
+        <table class="responses-table">
+          <thead id="respTableHead">
+            <tr>
+              <th>Select a form above to display responses.</th>
+            </tr>
+          </thead>
+          <tbody id="respTableBody">
+            <tr>
+              <td style="padding: 40px; text-align: center; color: var(--text-muted);">
+                <i class="fa-solid fa-folder-open" style="font-size: 2.5rem; margin-bottom: 12px; display: block;"></i>
+                No form selected.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- MODAL: ADD / EDIT STUDENT RESPONSE -->
+      <div id="studentResponseModal" class="modal-overlay hidden no-print">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="responseModalTitle"><i class="fa-solid fa-user-pen"></i> Student Response Entry</h3>
+            <button id="btnCloseResponseModal" style="background:none; border:none; color:var(--text-main); font-size:1.2rem; cursor:pointer;">&times;</button>
+          </div>
+          <form id="studentResponseForm">
+            <div id="dynamicResponseFields">
+              <!-- Fields generated dynamically based on form schema -->
+            </div>
+            <div style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
+              <button type="button" id="btnCancelResponseModal" class="btn-secondary-sm">Cancel</button>
+              <button type="submit" class="btn-primary-sm" id="btnSaveResponse">Save Student Data</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- VIEW 5: ACCOUNT SETTINGS -->
+    <section id="settingsView" class="view-section hidden">
+      <div class="settings-container">
+        
+        <div class="settings-title-bar">
+          <h2>Account Settings</h2>
+        </div>
+
+        <!-- CARD 1: UPDATE PROFILE NAME -->
+        <div class="settings-card">
+          <h3 class="settings-card-title">Update Profile Name</h3>
+          <form id="updateNameForm">
+            <div class="input-group">
+              <label for="settingsFullName">Full Name</label>
+              <input type="text" id="settingsFullName" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="input-group password-group">
+              <label for="nameConfirmPassword">Confirm Your Password</label>
+              <div class="password-wrapper">
+                <input type="password" id="nameConfirmPassword" placeholder="••••••••" required>
+                <i class="fa-regular fa-eye toggle-password" data-target="nameConfirmPassword"></i>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary settings-submit-btn">Update Name</button>
+          </form>
+        </div>
+
+        <!-- CARD 2: UPDATE EMAIL ADDRESS -->
+        <div class="settings-card">
+          <h3 class="settings-card-title">Update Email Address</h3>
+          <form id="updateEmailForm">
+            <div class="input-group">
+              <label for="settingsEmail">New Email</label>
+              <input type="email" id="settingsEmail" placeholder="Enter new email address" required>
+            </div>
+
+            <div class="input-group password-group">
+              <label for="emailConfirmPassword">Confirm Your Password</label>
+              <div class="password-wrapper">
+                <input type="password" id="emailConfirmPassword" placeholder="••••••••" required>
+                <i class="fa-regular fa-eye toggle-password" data-target="emailConfirmPassword"></i>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary settings-submit-btn">Update Email</button>
+          </form>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module" src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Responses - Groupix</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --primary-color: #1e3a8a;
+      --primary-hover: #1e40af;
+      --border-color: #e2e8f0;
+      --table-hover: #f1f5f9;
+      --shadow: 0 4px 15px -2px rgba(15, 23, 42, 0.05);
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #0b1329;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary-color: #2563eb;
+      --primary-hover: #3b82f6;
+      --border-color: #334155;
+      --table-hover: #0f172a;
+      --shadow: 0 4px 15px -2px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .btn-back:hover {
+      color: var(--primary-color);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--table-hover);
+    }
+
+    .title-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .stat-item {
+      background: var(--bg-color);
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .stat-item span {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .stat-item h3 {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      margin-top: 4px;
+    }
+
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      padding: 10px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--card-bg);
+      color: var(--text-main);
+      width: 100%;
+      max-width: 320px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .table-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow-x: auto;
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    th {
+      background-color: var(--bg-color);
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+
+    tr:hover {
+      background-color: var(--table-hover);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-muted);
+    }
+
+    .empty-state i {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+
+    /* Print styles */
+    @media print {
+      body { background: white; color: black; padding: 0; }
+      .header-nav, .controls-bar, .btn { display: none !important; }
+      .table-container, .title-card { border: none; box-shadow: none; }
+      th, td { border-bottom: 1px solid #ccc; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-nav">
+      <a href="dashboard.html" class="btn-back">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </a>
+      <div class="header-actions">
+        <button id="btnPrint" class="btn btn-outline">
+          <i class="fa-solid fa-print"></i> Print / Export PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Title & Stats Header -->
+    <div class="title-card">
+      <h1 id="formTitle">Loading Title...</h1>
+      <p id="formDesc" style="color: var(--text-muted); margin-top: 4px;"></p>
+      
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span>Total Responses</span>
+          <h3 id="statTotal">0</h3>
+        </div>
+        <div class="stat-item">
+          <span>Latest Submission</span>
+          <h3 id="statLatest" style="font-size: 1rem; margin-top: 8px;">--</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters & Search -->
+    <div class="controls-bar">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search entries...">
+    </div>
+
+    <!-- Responses Table -->
+    <div class="table-container">
+      <table id="responsesTable">
+        <thead id="tableHead">
+          <tr><th>Loading fields...</th></tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr><td class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i> Fetching responses...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+      getFirestore, 
+      doc, 
+      getDoc, 
+      collection, 
+      getDocs, 
+      query, 
+      orderBy 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDWz4W3OfUjXwlkO6dkPud5m4M0GZ1I4xs",
+      authDomain: "groupix-af7e2.firebaseapp.com",
+      projectId: "groupix-af7e2",
+      storageBucket: "groupix-af7e2.firebasestorage.app",
+      messagingSenderId: "246822951290",
+      appId: "1:246822951290:web:14c1a8047138dc34cc5ec3",
+      measurementId: "G-RMTZ2BNKVJ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const formId = urlParams.get('id');
+
+    let allResponses = [];
+    let tableHeaders = [];
+
+    async function initResponses() {
+      if (!formId) {
+        alert("No Form ID specified.");
+        window.location.href = 'dashboard.html';
+        return;
+      }
+
+      try {
+        // Fetch Form details
+        const formDoc = await getDoc(doc(db, "forms", formId));
+        if (!formDoc.exists()) {
+          alert("Form not found.");
+          window.location.href = 'dashboard.html';
+          return;
+        }
+
+        const formData = formDoc.data();
+        document.getElementById('formTitle').innerText = formData.title || "Untitled Form";
+        document.getElementById('formDesc').innerText = formData.description || "";
+
+        // Collect header schema
+        tableHeaders = ["#", "Date & Time"];
+        if (formData.defaultFields) {
+          formData.defaultFields.forEach(f => {
+            tableHeaders.push(f.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase()));
+          });
+        }
+        if (formData.customFields) {
+          formData.customFields.forEach(cf => tableHeaders.push(cf.name));
+        }
+
+        // Fetch Responses
+        const q = query(collection(db, "forms", formId, "responses"), orderBy("submittedAt", "desc"));
+        const snap = await getDocs(q);
+
+        allResponses = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+        // Update Stats
+        document.getElementById('statTotal').innerText = allResponses.length;
+        if (allResponses.length > 0 && allResponses[0].submittedAt) {
+          const latestDate = allResponses[0].submittedAt.toDate();
+          document.getElementById('statLatest').innerText = latestDate.toLocaleDateString() + " " + latestDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        renderTableHeaders(tableHeaders);
+        renderTableRows(allResponses, formData);
+
+      } catch (err) {
+        console.error(err);
+        alert("Error loading responses: " + err.message);
+      }
+    }
+
+    function renderTableHeaders(headers) {
+      const thead = document.getElementById('tableHead');
+      thead.innerHTML = `<tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>`;
+    }
+
+    function renderTableRows(responses, formData) {
+      const tbody = document.getElementById('tableBody');
+
+      if (responses.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="${tableHeaders.length}">
+              <div class="empty-state">
+                <i class="fa-solid fa-inbox"></i>
+                <p>No responses submitted yet.</p>
+              </div>
+            </td>
+          </tr>`;
+        return;
+      }
+
+      tbody.innerHTML = responses.map((resp, index) => {
+        const dateStr = resp.submittedAt ? resp.submittedAt.toDate().toLocaleString() : "N/A";
+        let rowCells = `<td>${responses.length - index}</td><td>${dateStr}</td>`;
+
+        // Render Default values
+        if (formData.defaultFields) {
+          formData.defaultFields.forEach(key => {
+            const val = (resp.defaultResponses && resp.defaultResponses[key]) ? resp.defaultResponses[key] : "-";
+            rowCells += `<td>${val}</td>`;
+          });
+        }
+
+        // Render Custom values
+        if (formData.customFields) {
+          formData.customFields.forEach(cf => {
+            const val = (resp.customResponses && resp.customResponses[cf.name]) ? resp.customResponses[cf.name] : "-";
+            rowCells += `<td>${val}</td>`;
+          });
+        }
+
+        return `<tr>${rowCells}</tr>`;
+      }).join('');
+    }
+
+    // Search Filter
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase();
+      const filtered = allResponses.filter(resp => {
+        const defaultVals = Object.values(resp.defaultResponses || {}).join(' ').toLowerCase();
+        const customVals = Object.values(resp.customResponses || {}).join(' ').toLowerCase();
+        return defaultVals.includes(term) || customVals.includes(term);
+      });
+
+      // Re-fetch form data reference stored locally
+      getDoc(doc(db, "forms", formId)).then(docSnap => {
+        renderTableRows(filtered, docSnap.data());
+      });
+    });
+
+    // Print
+    document.getElementById('btnPrint').addEventListener('click', () => {
+      window.print();
+    });
+
+    initResponses();
+  </script>
+</body>
+</html>

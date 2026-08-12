@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ha" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Groupix - Admin Authentication</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Theme Toggle Switch -->
+  <div class="theme-toggle-container">
+    <button id="themeToggleBtn" aria-label="Toggle Theme">
+      <i class="fa-solid fa-moon" id="themeIcon"></i>
+    </button>
+  </div>
+
+  <div class="auth-container">
+
+    <!-- LOGIN FORM (VISIBLE BY DEFAULT) -->
+    <!-- PWA INSTALL BANNER -->
+<div id="pwaInstallBanner" class="pwa-banner hidden">
+  <div class="pwa-content">
+    <i class="fa-solid fa-mobile-screen-button pwa-icon"></i>
+    <div class="pwa-text">
+      <strong>Get the Groupix App</strong>
+      <p>Install for a faster, offline-ready experience.</p>
+    </div>
+  </div>
+  <div class="pwa-actions">
+    <button id="pwaInstallBtn" class="btn-primary-sm">
+      <i class="fa-solid fa-download"></i> Download App
+    </button>
+    <button id="pwaDismissBtn" class="btn-text-sm">
+      Continue in Browser
+    </button>
+  </div>
+</div>
+
+    <div class="auth-card" id="loginCard">
+      <div class="brand-header">
+        <h2>Groupix Portal</h2>
+        <p>Welcome Back</p>
+      </div>
+
+      <form id="loginForm">
+        <div class="input-group">
+          <label for="loginEmail">Email Address</label>
+          <input type="email" id="loginEmail" placeholder="admin@example.com" required>
+        </div>
+
+        <div class="input-group">
+          <label for="loginPassword">Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="loginPassword" placeholder="••••••••" required>
+            <i class="fa-regular fa-eye toggle-password" data-target="loginPassword"></i>
+          </div>
+        </div>
+
+        <div class="forgot-link-wrapper">
+          <a href="#" id="showResetBtn">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="btn-primary">Login</button>
+      </form>
+
+      <p class="auth-switch-text">
+        Don't have an account? <a href="#" id="showSignupBtn">Sign Up</a>
+      </p>
+    </div>
+
+    <!-- SIGN UP FORM (HIDDEN BY DEFAULT) -->
+    <div class="auth-card hidden" id="signupCard">
+      <div class="brand-header">
+        <h2>Groupix Portal</h2>
+        <p>Create Admin Account</p>
+      </div>
+
+      <form id="signupForm">
+        <div class="input-group">
+          <label for="signupFullName">Full Name</label>
+          <input type="text" id="signupFullName" placeholder="John Doe" required>
+        </div>
+
+        <div class="input-group">
+          <label for="signupEmail">Email Address</label>
+          <input type="email" id="signupEmail" placeholder="admin@example.com" required>
+        </div>
+
+        <div class="input-group">
+          <label for="signupPassword">Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="signupPassword" placeholder="••••••••" required>
+            <i class="fa-regular fa-eye toggle-password" data-target="signupPassword"></i>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="signupConfirmPassword">Confirm Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="signupConfirmPassword" placeholder="••••••••" required>
+            <i class="fa-regular fa-eye toggle-password" data-target="signupConfirmPassword"></i>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary">Sign Up</button>
+      </form>
+
+      <p class="auth-switch-text">
+        Already have an account? <a href="#" id="showLoginBtn">Login</a>
+      </p>
+    </div>
+
+    <!-- RESET PASSWORD FORM -->
+    <div class="auth-card hidden" id="resetCard">
+      <div class="brand-header">
+        <h2>Reset Password</h2>
+        <p>Enter your email to receive a password reset link</p>
+      </div>
+
+      <form id="resetForm">
+        <div class="input-group">
+          <label for="resetEmail">Email Address</label>
+          <input type="email" id="resetEmail" placeholder="admin@example.com" required>
+        </div>
+
+        <button type="submit" class="btn-primary">Send Reset Link</button>
+      </form>
+
+      <p class="auth-switch-text">
+        <a href="#" id="backToLoginBtn"><i class="fa-solid fa-arrow-left"></i> Back to Login</a>
+      </p>
+    </div>
+
+  </div>
+
+  <script type="module" src="auth.js"></script>
+</body>
+</html>
