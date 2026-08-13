@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Groupix - Admin Authentication</title>
+  <title>Groupix - A Form Generator</title>
   <link rel="stylesheet" href="style.css">
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -137,5 +137,15 @@
   </div>
 
   <script type="module" src="auth.js"></script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js', { scope: './' })
+        .then(reg => console.log('PWA Registered', reg))
+        .catch(err => console.error('PWA Reg Error', err));
+    });
+  }
+  </script>
+  
 </body>
 </html>
