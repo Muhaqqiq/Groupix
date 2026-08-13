@@ -42,10 +42,11 @@
       background-color: var(--bg-color);
       color: var(--text-main);
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 20px;
+      padding: 20px 20px 80px 20px; /* Added bottom padding to ensure room for floating footer */
     }
 
     .form-container {
@@ -176,6 +177,39 @@
     .message-state.success i { color: #10b981; }
 
     .hidden { display: none !important; }
+
+    /* FLOATING FOOTER BANNER FOR GROUPIX PROMOTION */
+    .floating-brand-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: var(--card-bg);
+      border-top: 1px solid var(--border-color);
+      padding: 12px 20px;
+      text-align: center;
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .floating-brand-footer a {
+      color: var(--primary-color);
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .floating-brand-footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -223,6 +257,14 @@
         <i class="fa-solid fa-paper-plane"></i> Submit Response
       </button>
     </form>
+  </div>
+
+  <!-- Floating Footer Banner -->
+  <div class="floating-brand-footer">
+    <span>This form was created with <strong>Groupix</strong>.</span>
+    <a href="index.html" target="_blank">
+      Click here to create your own form <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.75rem;"></i>
+    </a>
   </div>
 
   <script type="module">
