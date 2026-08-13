@@ -1,3 +1,4 @@
+// Import Firebase Modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { 
   getAuth, 
@@ -475,11 +476,17 @@ function renderFormsToGrid(formsList, gridContainer) {
     return;
   }
 
-  gridContainer.innerHTML = "";
+gridContainer.innerHTML = "";
+
+  // Dynamically calculate the base repository path (e.g., "/groupix/")
+  const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
 
   formsList.forEach((form) => {
     const formId = form.id;
     const deadlineDate = form.deadline?.toDate ? form.deadline.toDate().toLocaleString() : "No deadline";
+
+    // Generate absolute URL including subpaths for GitHub Pages
+    const formShareUrl = `${window.location.origin}${basePath}form.html?id=${formId}`;
 
     const card = document.createElement('div');
     card.className = 'form-card';
@@ -501,7 +508,7 @@ function renderFormsToGrid(formsList, gridContainer) {
       </div>
 
       <div class="form-card-actions">
-        <button class="btn-card-action copy-btn" data-link="${window.location.origin}/form.html?id=${formId}">
+        <button class="btn-card-action copy-btn" data-link="${formShareUrl}">
           <i class="fa-regular fa-copy"></i> Copy Link
         </button>
         <button class="btn-card-action edit-btn" data-id="${formId}">
@@ -865,4 +872,4 @@ function resetResponsesView() {
   responsesStatsCard.classList.add('hidden');
   respTableHead.innerHTML = `<tr><th>Select a form above to display responses.</th></tr>`;
   respTableBody.innerHTML = `<tr><td style="padding: 40px; text-align: center;"><i class="fa-solid fa-folder-open" style="font-size: 2.5rem; margin-bottom: 12px; display: block;"></i>No form selected.</td></tr>`;
-}
+                                      }
